@@ -74,7 +74,8 @@ class CreateRoomView(APIView):
                 return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
             else:
-                room = Room(host=host, guest_can_pause=guest_can_pause, votes_to_skip=votes_to_skip)
+                room = Room(host=host, guest_can_pause=guest_can_pause,
+                            votes_to_skip=votes_to_skip)
                 room.save()
                 self.request.session['room_code'] = room.code
                 return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
@@ -109,7 +110,7 @@ class UpdateRoom(APIView):
     def patch(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
-        serializer = self.serializer_class(request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             guest_can_pause = serializer.data.get('guest_can_pause')
             votes_to_skip = serializer.data.get('votes_to_skip')
@@ -121,8 +122,9 @@ class UpdateRoom(APIView):
                 if room.host == user_id:
                     room.guest_can_pause = guest_can_pause
                     room.votes_to_stip = votes_to_skip
-                    room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+                    room.save(update_fields=[
+                              'guest_can_pause', 'votes_to_skip'])
                     return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
-                return Response({'Message': 'You are notl the hsot'}, status=status.HTTP_403_FORBIDDEN)
+                return Response({'Message': 'You are not the host'}, status=status.HTTP_403_FORBIDDEN)
             return Response({'Message': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
         return Response({'Bad Request': 'Invalid data'}, status=status.HTTP_400_BAD_REQUEST)

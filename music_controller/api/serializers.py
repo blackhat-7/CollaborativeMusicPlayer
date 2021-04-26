@@ -19,4 +19,4 @@ class UpdateRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        firlds = ('code', 'guest_can_pause', 'votes_to_skip')
+        fields = ('code', 'guest_can_pause', 'votes_to_skip')
