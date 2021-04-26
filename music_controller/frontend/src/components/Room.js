@@ -17,6 +17,8 @@ export default class Room extends Component {
         this.getRoomDetails();
         this.handleLeaveRoomPressed = this.handleLeaveRoomPressed.bind(this);
         this.updateShowSettings = this.updateShowSettings.bind(this);
+        this.renderSettingsButton = this.renderSettingsButton.bind(this);
+        this.renderSettings = this.renderSettings.bind(this);
     }
 
     updateShowSettings(val) {
@@ -40,11 +42,11 @@ export default class Room extends Component {
                     <CreateRoomPage update={true} 
                         votesToSkip={this.state.votesToSkip} 
                         guestCanPause={this.state.guestCanPause} 
-                        updateCallback={}
-                        />
+                        updateCallback={() => {}}
+                    />
                 </Grid>
                 <Grid item xs={12} align="center">
-                    
+                    <Button variant="contained" color="secondary" onClick={() => this.updateShowSettings(false)}>Close</Button>
                 </Grid>
             </Grid>
         );
@@ -72,6 +74,10 @@ export default class Room extends Component {
     }
 
     render() {
+        console.log(this.state.showSettings);
+        if (this.state.showSettings) {
+            return this.renderSettings();
+        }
         return (
             <Grid container spacing={1}>
                 <Grid item xs={12} align="center">
