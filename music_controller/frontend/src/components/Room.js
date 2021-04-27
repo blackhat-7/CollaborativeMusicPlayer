@@ -130,4 +130,3 @@ export default class Room extends Component {
     );
   }
 }
-

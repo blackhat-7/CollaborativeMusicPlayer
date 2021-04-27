@@ -10,6 +10,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Collapse } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 
 export default class CreateRoomPage extends Component {
   static defaultProps = {
@@ -29,12 +30,8 @@ export default class CreateRoomPage extends Component {
     };
     this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
-    this.handleCreateRoomButtonPressed = this.handleCreateRoomButtonPressed.bind(
-      this
-    );
-    this.handleUpdateRoomButtonPressed = this.handleUpdateRoomButtonPressed.bind(
-      this
-    );
+    this.handleCreateRoomButtonPressed = this.handleCreateRoomButtonPressed.bind(this);
+    this.handleUpdateRoomButtonPressed = this.handleUpdateRoomButtonPressed.bind(this);
   }
 
   handleVotesChange(e) {
@@ -97,11 +94,7 @@ export default class CreateRoomPage extends Component {
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={this.handleCreateRoomButtonPressed}
-          >
+          <Button color="primary" variant="contained" onClick={this.handleCreateRoomButtonPressed}>
             Create a Room
           </Button>
         </Grid>
@@ -117,11 +110,7 @@ export default class CreateRoomPage extends Component {
   renderUpdateButtons() {
     return (
       <Grid item xs={12} align="center">
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={this.handleUpdateRoomButtonPressed}
-        >
+        <Button color="primary" variant="contained" onClick={this.handleUpdateRoomButtonPressed}>
           Update Room
         </Button>
       </Grid>
@@ -133,12 +122,26 @@ export default class CreateRoomPage extends Component {
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
-          <Collapse
-            in={
-              this.state.successMessage != "" || this.state.errorMessage != ""
-            }
-          >
-            {this.state.successMessage}
+          <Collapse in={this.state.successMessage != "" || this.state.errorMessage != ""}>
+            {this.state.successMessage != "" ? (
+              <Alert
+                severity="success"
+                onClose={() => {
+                  this.setState({ successMessage: "" });
+                }}
+              >
+                {this.state.successMessage}
+              </Alert>
+            ) : (
+              <Alert
+                severity="error"
+                onClose={() => {
+                  this.setState({ errorMessage: "" });
+                }}
+              >
+                {this.state.errorMessage}
+              </Alert>
+            )}
           </Collapse>
         </Grid>
         <Grid item xs={12} align="center">
@@ -188,11 +191,8 @@ export default class CreateRoomPage extends Component {
             </FormHelperText>
           </FormControl>
         </Grid>
-        {this.props.update
-          ? this.renderUpdateButtons()
-          : this.renderCreateButtons()}
+        {this.props.update ? this.renderUpdateButtons() : this.renderCreateButtons()}
       </Grid>
     );
   }
 }
-
